@@ -1,6 +1,6 @@
 //https://adventofcode.com/2025/day/2
 
-use std::{cmp::max, fs::File, io::{BufRead, BufReader, Read}};
+use std::{fs::File, io::{BufRead, BufReader}};
 
 pub fn do_part1() -> anyhow::Result<i64> {
     println!("Day 2:");
