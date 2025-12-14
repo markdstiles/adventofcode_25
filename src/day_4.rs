@@ -31,7 +31,41 @@ pub fn do_part1() -> anyhow::Result<i64> {
 }
 
 fn mark_forklift_locations(map: &mut Vec<Vec<char>>) {
+    let cols = map[0].len();
+    let rows = map.len();
 
+    for row in 0..rows {
+        for col in 0..cols {
+            //Only consider cell if it is a roll of paper
+            //Detect surrounding rolls '@' or marked rolls 'x'
+            if map[row][col] == '@' {
+                let mut rolls = 0;
+
+                //Keep within left and right edges
+                let col_from = if col == 0 { col } else { col-1 };
+                let col_to = if col == cols-1 { col } else { col+1 };
+                
+                if row != 0 {
+                    //Previous row - unless we're at the top edge
+                    rolls = map[row-1][col_from..=col_to].iter().filter(|c| **c == '@' || **c == 'x').count();
+                }
+
+                //Left & right
+                rolls += map[row][col_from..=col_to].iter().filter(|c| **c == '@' || **c == 'x').count();
+                rolls -= 1; //Ignore current cell
+                
+                if row != rows-1 {
+                    //Next row - unless we're at the bottom  edge
+                    rolls += map[row+1][col_from..=col_to].iter().filter(|c| **c == '@' || **c == 'x').count();
+                }
+
+                if rolls < 4 {
+                    //Accessible - mark cell
+                    map[row][col] = 'x'
+                }
+            }
+        }
+    }
 }
 
 fn count_forklift_locations(map: &[Vec<char>]) -> usize {
@@ -47,7 +81,7 @@ pub fn do_part2() -> anyhow::Result<i64> {
     println!("Reading input from {}", input_file.display());
 
     let file = File::open(input_file)?;
-    let reader = BufReader::new(file);
+    let _reader = BufReader::new(file);
 
 
     Ok(0 as i64)
@@ -55,21 +89,18 @@ pub fn do_part2() -> anyhow::Result<i64> {
 
 #[test]
 fn day1_proof() {
-    let input = [
-        "..@@.@@@@.",
-        "@@@.@.@.@@",
-        "@@@@@.@.@@",
-        "@.@@@@..@.",
-        "@@.@@@@.@@",
-        ".@@@@@@@.@",
-        ".@.@.@.@@@",
-        "@.@@@.@@@@",
-        ".@@@@@@@@.",
-        "@.@.@@@.@.",
+    let mut map: Vec<Vec<char>> = vec![
+        "..@@.@@@@.".chars().collect::<Vec<char>>(),
+        "@@@.@.@.@@".chars().collect::<Vec<char>>(),
+        "@@@@@.@.@@".chars().collect::<Vec<char>>(),
+        "@.@@@@..@.".chars().collect::<Vec<char>>(),
+        "@@.@@@@.@@".chars().collect::<Vec<char>>(),
+        ".@@@@@@@.@".chars().collect::<Vec<char>>(),
+        ".@.@.@.@@@".chars().collect::<Vec<char>>(),
+        "@.@@@.@@@@".chars().collect::<Vec<char>>(),
+        ".@@@@@@@@.".chars().collect::<Vec<char>>(),
+        "@.@.@@@.@.".chars().collect::<Vec<char>>(),
     ];
-
-    let mut map: Vec<Vec<char>> = input.map(|line| line.chars().collect::<Vec<char>>()).to_vec();
-
     mark_forklift_locations(&mut map);
     let total = count_forklift_locations(&map);
 
