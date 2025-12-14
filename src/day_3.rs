@@ -3,7 +3,7 @@
 use std::{fs::File, io::{BufRead, BufReader}};
 
 pub fn do_part1() -> anyhow::Result<i64> {
-    println!("Day 2:");
+    println!("Day 3:");
     
     let mut input_file = std::env::current_dir()?;
     input_file.push("input\\day3.txt");
@@ -102,7 +102,7 @@ impl BatteryArray {
 }
 
 pub fn do_part2() -> anyhow::Result<i64> {
-    println!("Day 2:");
+    println!("Day 3:");
     
     let mut input_file = std::env::current_dir()?;
     input_file.push("input\\day3.txt");
