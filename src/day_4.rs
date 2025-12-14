@@ -72,6 +72,16 @@ fn count_forklift_locations(map: &[Vec<char>]) -> usize {
     map.iter().flatten().filter(|c| **c == 'x').count()
 }
 
+fn clear_forklift_locations(map: &mut Vec<Vec<char>>) {
+    for row in map {
+        for col in row {
+            if *col == 'x' {
+                *col = '.';
+            }
+        }
+    }
+}
+
 pub fn do_part2() -> anyhow::Result<i64> {
     println!("Day 4:");
     
@@ -81,10 +91,29 @@ pub fn do_part2() -> anyhow::Result<i64> {
     println!("Reading input from {}", input_file.display());
 
     let file = File::open(input_file)?;
-    let _reader = BufReader::new(file);
+    let reader = BufReader::new(file);
 
+    let mut map: Vec<Vec<char>> = reader.lines()
+        .map(|line| 
+            line.unwrap()
+                .chars()
+                .collect::<Vec<char>>()
+            )
+        .collect();
+    
+    let mut total = 0;
 
-    Ok(0 as i64)
+    loop {
+        mark_forklift_locations(&mut map);
+        let count = count_forklift_locations(&map);
+        if count == 0 {
+            break;
+        }
+        total += count;
+        clear_forklift_locations(&mut map);
+    }
+
+    Ok(total as i64)
 }
 
 #[test]
@@ -120,5 +149,41 @@ fn day1_proof() {
 
 #[test]
 fn day2_proof() {
+    let mut map: Vec<Vec<char>> = vec![
+        "..@@.@@@@.".chars().collect::<Vec<char>>(),
+        "@@@.@.@.@@".chars().collect::<Vec<char>>(),
+        "@@@@@.@.@@".chars().collect::<Vec<char>>(),
+        "@.@@@@..@.".chars().collect::<Vec<char>>(),
+        "@@.@@@@.@@".chars().collect::<Vec<char>>(),
+        ".@@@@@@@.@".chars().collect::<Vec<char>>(),
+        ".@.@.@.@@@".chars().collect::<Vec<char>>(),
+        "@.@@@.@@@@".chars().collect::<Vec<char>>(),
+        ".@@@@@@@@.".chars().collect::<Vec<char>>(),
+        "@.@.@@@.@.".chars().collect::<Vec<char>>(),
+    ];
 
+    let mut total = 0;
+
+    loop {
+        mark_forklift_locations(&mut map);
+        let count = count_forklift_locations(&map);
+        if count == 0 {
+            break;
+        }
+        total += count;
+        clear_forklift_locations(&mut map);
+    }
+
+    assert_eq!(map[0].iter().collect::<String>(), "..........");
+    assert_eq!(map[1].iter().collect::<String>(), "..........");
+    assert_eq!(map[2].iter().collect::<String>(), "..........");
+    assert_eq!(map[3].iter().collect::<String>(), "....@@....");
+    assert_eq!(map[4].iter().collect::<String>(), "...@@@@...");
+    assert_eq!(map[5].iter().collect::<String>(), "...@@@@@..");
+    assert_eq!(map[6].iter().collect::<String>(), "...@.@.@@.");
+    assert_eq!(map[7].iter().collect::<String>(), "...@@.@@@.");
+    assert_eq!(map[8].iter().collect::<String>(), "...@@@@@..");
+    assert_eq!(map[9].iter().collect::<String>(), "....@@@...");
+    
+    assert_eq!(total, 43);
 }
