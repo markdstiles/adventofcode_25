@@ -16,6 +16,10 @@ impl FreshRange {
         let range: Vec<usize> = range_str.split("-").map(|s| s.parse().unwrap()).collect();
         FreshRange { from: range[0], to: range[1] }
     }
+
+    fn count(&self) -> usize {
+        (self.to - self.from) + 1
+    }
 }
 
 pub fn do_part1() -> anyhow::Result<i64> {
@@ -61,8 +65,35 @@ pub fn do_part2() -> anyhow::Result<i64> {
 
     let file = File::open(input_file)?;
     let reader = BufReader::new(file);
+ 
+    let mut ranges: Vec<FreshRange> = vec![];
 
-    Ok(0 as i64)
+    for line in reader.lines() {
+        let line = line?;
+        if line.contains("-") {
+            ranges.push(FreshRange::from_string(line));
+        }
+    }
+
+    ranges.sort_by(|a, b| a.from.cmp(&b.from));
+
+    //Consolidate duplicate or overlapping ranges
+    let mut unique_ranges: Vec<FreshRange> = vec![];
+    
+    for range in ranges {
+        if let Some(u_range) = unique_ranges.iter_mut().filter(|u| range.from >= u.from && range.from <= u.to).last() {
+            //Ensure the 'to' value is greater than current unique range (don't want to make it smaller)
+            if u_range.to < range.to {
+                u_range.to = range.to;
+            }
+        } else {
+            unique_ranges.push(range);
+        }
+    }
+
+    let total: usize = unique_ranges.iter().map(|r| r.count()).sum();
+
+    Ok(total as i64)
 }
 
 #[test]
@@ -97,4 +128,72 @@ fn day1_proof() {
     assert_eq!(fresh[0], 5);
     assert_eq!(fresh[1], 11);
     assert_eq!(fresh[2], 17);
+}
+
+#[test]
+fn day2_proof() {
+    let mut ranges = [
+        FreshRange::new(3, 5),
+        FreshRange::new(10, 14),
+        FreshRange::new(16, 20),
+        FreshRange::new(12, 18),
+    ];
+
+    ranges.sort_by(|a, b| a.from.cmp(&b.from));
+
+    //Consolidate duplicate or overlapping ranges
+    let mut unique_ranges: Vec<FreshRange> = vec![];
+    
+    for range in ranges {
+        if let Some(u_range) = unique_ranges.iter_mut().filter(|u| range.from >= u.from && range.from <= u.to).last() {
+            u_range.to = range.to;
+        } else {
+            unique_ranges.push(range);
+        }
+    }
+
+    let total: usize = unique_ranges.iter().map(|r| r.count()).sum();
+
+    assert_eq!(total, 14);
+    assert_eq!(unique_ranges.len(), 2);
+    assert_eq!(unique_ranges[0].from, 3);
+    assert_eq!(unique_ranges[0].to, 5);
+    assert_eq!(unique_ranges[1].from, 10);
+    assert_eq!(unique_ranges[1].to, 20);
+}
+
+#[test]
+fn day2_inner_range() {
+    let mut ranges = [
+        FreshRange::new(3, 5),
+        FreshRange::new(10, 14),
+        FreshRange::new(16, 20),
+        FreshRange::new(12, 18),
+        FreshRange::new(17, 19),
+    ];
+
+    ranges.sort_by(|a, b| a.from.cmp(&b.from));
+
+    //Consolidate duplicate or overlapping ranges
+    let mut unique_ranges: Vec<FreshRange> = vec![];
+    
+    for range in ranges {
+        if let Some(u_range) = unique_ranges.iter_mut().filter(|u| range.from >= u.from && range.from <= u.to).last() {
+            //Ensure the 'to' value is greater than current unique range (don't want to make it smaller)
+            if u_range.to < range.to {
+                u_range.to = range.to;
+            }
+        } else {
+            unique_ranges.push(range);
+        }
+    }
+
+    let total: usize = unique_ranges.iter().map(|r| r.count()).sum();
+
+    assert_eq!(total, 14);
+    assert_eq!(unique_ranges.len(), 2);
+    assert_eq!(unique_ranges[0].from, 3);
+    assert_eq!(unique_ranges[0].to, 5);
+    assert_eq!(unique_ranges[1].from, 10);
+    assert_eq!(unique_ranges[1].to, 20);
 }
