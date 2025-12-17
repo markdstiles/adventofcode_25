@@ -156,7 +156,6 @@ fn day1_proof() {
 
 #[test]
 fn day2_proof() {
-    //We'll skip every other line (all .'s)
     let input = [
         ".......S.......",
         "...............",
