@@ -48,10 +48,12 @@ fn traverse_tree(x: isize, y: usize, visited: &mut HashMap<(isize, usize), usize
     let next_row = y + 1;
 
     if let Some(result) = visited.get(&(x, y)) {
+        //If visited, no need to explore further
         return *result
     }
 
     if next_row == map_height {
+        //Record that we've visited the bottom
         visited.entry((x, y)).or_insert(1);
         1
     } else if next_row < map_height && map[next_row][x as usize] != '^' {
@@ -66,6 +68,8 @@ fn traverse_tree(x: isize, y: usize, visited: &mut HashMap<(isize, usize), usize
         if x+1 < map_width {
             result += traverse_tree(x+1, next_row, visited, map, map_height, map_width);
         }
+        //Record when both branches have been visited - no further need to explore these branches
+        //This reduces repeated exploration of branches
         visited.entry((x, y)).or_insert(result);
         result
     }
