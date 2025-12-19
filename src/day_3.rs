@@ -133,7 +133,7 @@ pub fn do_part2() -> anyhow::Result<i64> {
 }
 
 #[test]
-fn day1_proof() {
+fn part1_proof() {
     let batts : [u8; 60] = [
         9,8,7,6,5,4,3,2,1,1,1,1,1,1,1,
         8,1,1,1,1,1,1,1,1,1,1,1,1,1,9,
@@ -154,7 +154,7 @@ fn day1_proof() {
 }
 
 #[test]
-fn day2_proof() {
+fn part2_proof() {
     let batts : [u8; 60] = [
         9,8,7,6,5,4,3,2,1,1,1,1,1,1,1,
         8,1,1,1,1,1,1,1,1,1,1,1,1,1,9,

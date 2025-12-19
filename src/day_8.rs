@@ -29,3 +29,8 @@ pub fn do_part2() -> anyhow::Result<i64> {
 
     Ok(0 as i64)
 }
+
+#[test]
+fn part1_proof() {
+    
+}

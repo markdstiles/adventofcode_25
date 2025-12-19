@@ -117,7 +117,7 @@ pub fn do_part2() -> anyhow::Result<i64> {
 }
 
 #[test]
-fn day1_proof() {
+fn part1_proof() {
     let mut map: Vec<Vec<char>> = vec![
         "..@@.@@@@.".chars().collect::<Vec<char>>(),
         "@@@.@.@.@@".chars().collect::<Vec<char>>(),
@@ -148,7 +148,7 @@ fn day1_proof() {
 }
 
 #[test]
-fn day2_proof() {
+fn part2_proof() {
     let mut map: Vec<Vec<char>> = vec![
         "..@@.@@@@.".chars().collect::<Vec<char>>(),
         "@@@.@.@.@@".chars().collect::<Vec<char>>(),

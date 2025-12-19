@@ -328,7 +328,7 @@ fn no_repeated() {
 }
 
 #[test]
-fn day1_proof() {
+fn part1_proof() {
     let ranges = [
         (11,22),
         (95,115),
@@ -382,7 +382,7 @@ fn range_with_triple_digits() {
 }
 
 #[test]
-fn day2_proof() {
+fn part2_proof() {
     let ranges = [
         (11,22),
         (95,115),

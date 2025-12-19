@@ -104,7 +104,7 @@ pub fn do_part2() -> anyhow::Result<i64> {
 }
 
 #[test]
-fn day1_proof() {
+fn part1_proof() {
     let input = [
         ".......S.......",
         "...............",
@@ -155,7 +155,7 @@ fn day1_proof() {
 }
 
 #[test]
-fn day2_proof() {
+fn part2_proof() {
     let input = [
         ".......S.......",
         "...............",

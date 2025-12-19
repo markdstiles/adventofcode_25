@@ -90,7 +90,7 @@ pub fn do_part2() -> anyhow::Result<i64> {
 }
 
 #[test]
-fn day1_proof() {
+fn part1_proof() {
     let input = [
         "123 328  51 64 ",
         " 45 64  387 23 ",
@@ -121,7 +121,7 @@ fn day1_proof() {
 }
 
 #[test]
-fn day2_proof() {
+fn part2_proof() {
     let input = [
         "123 328  51 64 ",
         " 45 64  387 23 ",
